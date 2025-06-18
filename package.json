@@ -2,7 +2,6 @@
   "name": "workflow-generator",
   "version": "1.0.0",
   "description": "GitHub Actions Workflow Generator for MATLAB website",
-  "main": "src/main.js",
   "type": "module",
   "scripts": {
     "lint": "eslint public/scripts/ --ext .js",
@@ -17,8 +16,6 @@
     "type": "git",
     "url": "git+https://github.com/matlab-actions/workflow-generator.git"
   },
-  "keywords": [],
-  "author": "",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/matlab-actions/workflow-generator/issues"
