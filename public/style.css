@@ -1,0 +1,75 @@
+body {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+  font-size: 1rem;
+  color: #212529;
+}
+
+h2 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+footer {
+  color: #6c757d;
+}
+
+main.container {
+  max-width: 480px;
+}
+
+.main-card {
+  box-shadow: 0 8px 16px rgb(0 0 0 / 0.1);
+  border-radius: 1rem;
+  border: none;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+input.form-control {
+  font-size: 1.1rem;
+  padding: 0.625rem 0.75rem;
+  transition: box-shadow 0.3s ease;
+}
+
+input.form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.3);
+}
+
+button.btn-primary {
+  font-size: 1.1rem;
+  padding: 0.625rem 0;
+  border-radius: 0.5rem;
+}
+
+p.lead.text-muted {
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.form-check-input {
+  clear: left;
+}
+
+.form-switch.form-switch-md {
+  margin-bottom: 1rem;
+}
+
+.form-switch.form-switch-md .form-check-input {
+  height: 1.5rem;
+  width: calc(2rem + 0.75rem);
+  border-radius: 3rem;
+  cursor: pointer;
+  vertical-align: middle;
+  margin-top: 0;
+}
+
+.form-switch.form-switch-md .form-check-label {
+  user-select: none;
+  cursor: pointer;
+  line-height: 1.5rem;
+  margin-bottom: 0;
+}
