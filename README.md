@@ -1,6 +1,6 @@
-# Website for Generating a MATLAB workflow
+# Website for Generating a MATLAB Workflow
 
-The [GitHub Actions Workflow Generator for MATLAB](https://matlab-actions.github.io/workflow-generator/) website enables you to generate a starter GitHub Actions workflow file for your GitHub repository.
+The [GitHub Actions Workflow Generator for MATLAB](https://matlab-actions.github.io/workflow-generator/) website enables you to generate a starter GitHub&reg; Actions workflow for your GitHub repository that contains MATLAB&reg; code and Simulink&reg; models.
 
 ## Try It
 
