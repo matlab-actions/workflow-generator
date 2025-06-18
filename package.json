@@ -1,7 +1,7 @@
 {
   "name": "workflow-generator",
   "version": "1.0.0",
-  "description": "<p align=\"center\">   <a href=\"https://mcafaro.github.io/workflow-generator/\">     <img src=\"assets/button.svg\" alt=\"Generate Starter Workflow\">   </a> </p>",
+  "description": "GitHub Actions Workflow Generator for MATLAB website",
   "main": "src/main.js",
   "type": "module",
   "scripts": {
@@ -15,15 +15,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mcafaro/workflow-generator.git"
+    "url": "git+https://github.com/matlab-actions/workflow-generator.git"
   },
   "keywords": [],
   "author": "",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/mcafaro/workflow-generator/issues"
+    "url": "https://github.com/matlab-actions/workflow-generator/issues"
   },
-  "homepage": "https://github.com/mcafaro/workflow-generator#readme",
+  "homepage": "https://matlab-actions.github.io/workflow-generator",
   "devDependencies": {
     "@eslint/css": "^0.9.0",
     "@eslint/js": "^9.29.0",
