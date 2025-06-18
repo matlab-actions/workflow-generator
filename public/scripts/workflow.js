@@ -63,6 +63,7 @@ function generateWorkflow({
         ...(buildAcrossPlatforms
           ? {
               strategy: {
+                "fail-fast": false,
                 matrix: {
                   os: ["ubuntu-latest", "windows-latest", "macos-latest"],
                 },
