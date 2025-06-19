@@ -1,0 +1,120 @@
+h2 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+footer {
+  color: #6c757d;
+}
+
+main.container {
+  max-width: 480px;
+}
+
+main.form {
+  max-width: 380px;
+}
+
+input.form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(0, 118, 168, 0.3);
+}
+
+.btn-primary,
+button.btn-primary {
+  background-color: #0076a8;
+  color: #fff;
+  border: 1px solid #0076a8;
+  font-size: 1.1rem;
+  padding: 0.625rem 0;
+  border-radius: 0.5rem;
+}
+
+.btn-primary:hover,
+button.btn-primary:hover,
+.btn-primary:focus,
+button.btn-primary:focus,
+.btn-primary:active,
+button.btn-primary:active {
+  background-color: #005b82 !important;
+  border-color: #005b82 !important;
+}
+
+.btn-primary:focus,
+button.btn-primary:focus {
+  box-shadow: 0 0 0 0.25rem rgba(0, 118, 168, 0.3);
+}
+
+.btn-primary:active,
+button.btn-primary:active {
+  box-shadow: none;
+}
+
+.btn-link,
+button.btn.btn-link {
+  color: #0076a8;
+  text-decoration: none;
+}
+
+.btn-link:hover,
+button.btn.btn-link:hover,
+.btn-link:focus,
+button.btn.btn-link:focus {
+  color: #005b82;
+}
+
+.btn-link:focus,
+button.btn.btn-link:focus {
+  box-shadow: none;
+}
+
+.btn-link:focus-visible,
+button.btn.btn-link:focus-visible {
+  box-shadow: 0 0 0 0.25rem rgba(0, 118, 168, 0.3);
+}
+
+.btn-link:active,
+button.btn.btn-link:active {
+  box-shadow: none;
+}
+
+p.lead.text-muted {
+  font-size: 1.05rem;
+}
+
+.form-check-input:focus {
+  box-shadow: none;
+}
+
+.form-check-input:focus-visible {
+  box-shadow: 0 0 0 0.2rem rgba(0, 118, 168, 0.25);
+  border-color: #66b8df;
+}
+
+.form-check-input:checked {
+  background-color: #0076a8;
+  border-color: #0076a8;
+}
+
+.form-switch.form-switch-md {
+  margin-bottom: 1rem;
+}
+
+.form-switch.form-switch-md .form-check-input {
+  height: 1.5rem;
+  width: calc(2rem + 0.75rem);
+  border-radius: 3rem;
+  cursor: pointer;
+  vertical-align: middle;
+  margin-top: 0;
+}
+
+.form-switch.form-switch-md .form-check-label {
+  user-select: none;
+  cursor: pointer;
+  line-height: 1.5rem;
+  margin-bottom: 0;
+}
+
+.bi-question-circle {
+  color: #0076a8;
+}

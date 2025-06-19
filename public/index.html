@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Generate a GitHub Actions workflow file for running MATLAB code." />
+    <meta name="theme-color" content="#f8f9fa" />
+    <link rel="icon" href="assets/favicon.ico" />
+    <title>GitHub Actions Workflow Generator for MATLAB</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <noscript>
+      <div class="alert alert-warning text-center" role="alert">
+        This site requires JavaScript to function. Please enable JavaScript in
+        your browser.
+      </div>
+    </noscript>
+    <main class="container py-5">
+      <div class="text-center mb-4">
+        <img
+          src="assets/logo.png"
+          alt="MATLAB logo"
+          class="d-block mx-auto mb-3"
+          width="100"
+          height="100" />
+        <h2>Generate a GitHub Actions Workflow for MATLAB</h2>
+        <p class="lead text-muted">
+          Enter your repository to generate a starter workflow.
+        </p>
+      </div>
+      <div class="ps-4 pe-4">
+        <form id="generateForm" class="needs-validation" novalidate>
+          <div class="form-floating mb-4">
+            <input
+              type="text"
+              class="form-control"
+              id="repo"
+              placeholder="username/repository or URL"
+              autocomplete="off"
+              required
+              autofocus />
+            <label for="repo" class="form-label">
+              username/repository or URL
+            </label>
+            <div class="invalid-feedback">
+              Please enter a valid username/repository or URL
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary w-100 mb-4"
+            id="generateButton"
+            aria-label="Generate Workflow">
+            Generate Workflow
+          </button>
+          <div class="mb-4 text-center">
+            <button
+              class="btn btn-link d-flex align-items-center justify-content-center mx-auto p-0"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#advancedOptions">
+              Advanced Options
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="ms-1"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-chevron-down"
+                viewBox="0 0 16 16">
+                <path
+                  fill-rule="evenodd"
+                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+              </svg>
+            </button>
+            <div class="collapse mt-4" id="advancedOptions">
+              <div
+                class="form-check form-switch form-switch-md d-flex justify-content-between align-items-center"
+                data-bs-toggle="tooltip"
+                title="Enable to license MATLAB with a batch token if your repository is private or uses transformation products, such as MATLAB Coder and MATLAB Compiler.">
+                <div class="d-flex align-items-center">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="useBatchToken" />
+                  <label class="form-check-label ms-2" for="useBatchToken">
+                    Use MATLAB batch licensing token
+                  </label>
+                </div>
+                <a
+                  href="https://github.com/matlab-actions/#use-matlab-batch-licensing-token"
+                  target="_blank"
+                  rel="noopener">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-question-circle"
+                    viewBox="0 0 16 16">
+                    <path
+                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                    <path
+                      d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94" />
+                  </svg>
+                </a>
+              </div>
+              <div
+                class="form-check form-switch form-switch-md d-flex justify-content-between align-items-center"
+                data-bs-toggle="tooltip"
+                title="Enable to run MATLAB code that requires a display on GitHub-hosted Linux runners, such as tests that interact with an app UI.">
+                <div class="d-flex align-items-center">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="useVirtualDisplay" />
+                  <label class="form-check-label ms-2" for="useVirtualDisplay">
+                    Use virtual display on Linux runner
+                  </label>
+                </div>
+                <a
+                  href="https://github.com/matlab-actions/#use-virtual-display-on-linux-runner"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-question-circle"
+                    viewBox="0 0 16 16">
+                    <path
+                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                    <path
+                      d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94" />
+                  </svg>
+                </a>
+              </div>
+              <div
+                class="form-check form-switch form-switch-md d-flex justify-content-between align-items-center mb-0"
+                data-bs-toggle="tooltip"
+                title="Enable to define a matrix of jobs that run your MATLAB code across Linux, Windows, and macOS.">
+                <div class="d-flex align-items-center">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="buildAcrossPlatforms" />
+                  <label
+                    class="form-check-label ms-2"
+                    for="buildAcrossPlatforms">
+                    Build across multiple platforms
+                  </label>
+                </div>
+                <a
+                  href="https://github.com/matlab-actions/setup-matlab/?tab=readme-ov-file#build-across-multiple-platforms"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-question-circle"
+                    viewBox="0 0 16 16">
+                    <path
+                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                    <path
+                      d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+    <footer class="my-5 pt-5 text-center text-small">
+      <p class="mb-1">
+        &copy;
+        <span id="footerYear"></span>
+        The MathWorks, Inc.
+      </p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <script type="module" src="scripts/main.js"></script>
+    <script>
+      document.getElementById("footerYear").textContent =
+        new Date().getFullYear();
+    </script>
+  </body>
+</html>
