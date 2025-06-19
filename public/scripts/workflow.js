@@ -118,13 +118,13 @@ function generateWorkflow({
     yaml
       .replace(
         /^(\s*)products:/m,
-        "$1# Products to set up in addition to MATLAB.\n" +
+        "$1# Products to set up in addition to MATLAB\n" +
           "$1# See https://github.com/matlab-actions/setup-matlab/?tab=readme-ov-file#set-up-matlab\n" +
           "$1# products:",
       ) // comment out products and add comment above
       .replace(
         /^(\s*)(MLM_LICENSE_TOKEN: .*)/m,
-        "$1# You must set the MLM_LICENSE_TOKEN secret in your repository settings.\n" +
+        "$1# You must set the MLM_LICENSE_TOKEN secret in your repository settings\n" +
           "$1# See https://github.com/matlab-actions/setup-matlab/?tab=readme-ov-file#use-matlab-batch-licensing-token\n" +
           "$1$2",
       ) // comment above MLM_LICENSE_TOKEN
