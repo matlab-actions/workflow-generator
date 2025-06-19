@@ -1,4 +1,7 @@
 function parseRepositoryURL(repoURL) {
+  if (repoURL.startsWith("git@") || repoURL.startsWith("ssh://")) {
+    return null;
+  }
   if (repoURL.endsWith(".git")) {
     repoURL = repoURL.slice(0, -4);
   }

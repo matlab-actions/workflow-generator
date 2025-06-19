@@ -79,6 +79,12 @@ describe("parseRepositoryURL", () => {
     expect(parseRepositoryURL("https://github.com/")).toBeNull();
     expect(parseRepositoryURL("https://github.com/owner")).toBeNull();
     expect(parseRepositoryURL("https://github.com/owner/")).toBeNull();
+    expect(
+      parseRepositoryURL("git@github.com:octocat/Hello-World.git"),
+    ).toBeNull();
+    expect(
+      parseRepositoryURL("ssh://git@github.com/owner/repo.git"),
+    ).toBeNull();
   });
 });
 
