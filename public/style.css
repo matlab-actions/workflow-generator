@@ -1,14 +1,6 @@
-body {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  min-height: 100vh;
-  font-size: 1rem;
-  color: #212529;
-}
-
 h2 {
   font-weight: 600;
   letter-spacing: -0.02em;
-  margin-bottom: 0.5rem;
 }
 
 footer {
@@ -19,39 +11,68 @@ main.container {
   max-width: 480px;
 }
 
-.main-card {
-  box-shadow: 0 8px 16px rgb(0 0 0 / 0.1);
-  border-radius: 1rem;
-  border: none;
-}
-
-.form-label {
-  font-weight: 500;
-}
-
-input.form-control {
-  font-size: 1.1rem;
-  padding: 0.625rem 0.75rem;
-  transition: box-shadow 0.3s ease;
+main.form {
+  max-width: 380px;
 }
 
 input.form-control:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.3);
+  box-shadow: 0 0 0 0.25rem rgba(0, 118, 168, 0.3);
 }
 
+.btn-primary,
 button.btn-primary {
+  background-color: #0076a8;
+  color: #fff;
+  border: 1px solid #0076a8;
   font-size: 1.1rem;
   padding: 0.625rem 0;
   border-radius: 0.5rem;
 }
 
-p.lead.text-muted {
-  font-size: 1.05rem;
-  line-height: 1.5;
+.btn-primary:hover,
+button.btn-primary:hover,
+.btn-primary:focus,
+button.btn-primary:focus,
+.btn-primary:active,
+button.btn-primary:active {
+  background-color: #005b82 !important;
+  border-color: #005b82 !important;
 }
 
-.form-check-input {
-  clear: left;
+.btn-primary:focus,
+button.btn-primary:focus {
+  box-shadow: 0 0 0 0.25rem rgba(0, 118, 168, 0.3);
+}
+
+.btn-link,
+button.btn.btn-link {
+  color: #0076a8;
+  text-decoration: none;
+}
+
+.btn-link:hover,
+button.btn.btn-link:hover,
+.btn-link:focus,
+button.btn.btn-link:focus {
+  color: #005b82;
+}
+
+.btn-link:focus,
+button.btn.btn-link:focus {
+  box-shadow: 0 0 0 0.25rem rgba(0, 118, 168, 0.3);
+}
+
+p.lead.text-muted {
+  font-size: 1.05rem;
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 118, 168, 0.25);
+}
+
+.form-check-input:checked {
+  background-color: #0076a8;
+  border-color: #0076a8;
 }
 
 .form-switch.form-switch-md {
@@ -72,4 +93,8 @@ p.lead.text-muted {
   cursor: pointer;
   line-height: 1.5rem;
   margin-bottom: 0;
+}
+
+.bi-question-circle {
+  color: #0076a8;
 }
