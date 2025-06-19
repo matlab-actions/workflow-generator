@@ -62,7 +62,7 @@ document
   .addEventListener("submit", handleFormSubmit);
 document
   .getElementById("downloadButton")
-  .addEventListener("click", handleDownloadClick);
+  ?.addEventListener("click", handleDownloadClick);
 
 document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
   new bootstrap.Tooltip(el);
