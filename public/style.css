@@ -68,6 +68,7 @@ p.lead.text-muted {
 
 .form-check-input:focus {
   box-shadow: 0 0 0 0.2rem rgba(0, 118, 168, 0.25);
+  border-color: #66b8df;
 }
 
 .form-check-input:checked {
