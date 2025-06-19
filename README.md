@@ -2,14 +2,6 @@
 
 The [GitHub Actions Workflow Generator for MATLAB](https://matlab-actions.github.io/workflow-generator/) website enables you to generate a starter GitHub&reg; Actions workflow for your GitHub repository that contains MATLAB&reg; code and Simulink&reg; models.
 
-## Try It
-
-<p align="center">
-  <a href="https://matlab-actions.github.io/workflow-generator/">
-    <img src="https://matlab-actions.github.io/workflow-generator/assets/button.svg" alt="Generate Starter Workflow">
-  </a>
-</p>
-
 ## See Also
 
 - [Action for Running MATLAB Builds](https://github.com/matlab-actions/run-build/)
