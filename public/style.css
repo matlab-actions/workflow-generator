@@ -44,6 +44,11 @@ button.btn-primary:focus {
   box-shadow: 0 0 0 0.25rem rgba(0, 118, 168, 0.3);
 }
 
+.btn-primary:active,
+button.btn-primary:active {
+  box-shadow: none;
+}
+
 .btn-link,
 button.btn.btn-link {
   color: #0076a8;
@@ -59,7 +64,17 @@ button.btn.btn-link:focus {
 
 .btn-link:focus,
 button.btn.btn-link:focus {
+  box-shadow: none;
+}
+
+.btn-link:focus-visible,
+button.btn.btn-link:focus-visible {
   box-shadow: 0 0 0 0.25rem rgba(0, 118, 168, 0.3);
+}
+
+.btn-link:active,
+button.btn.btn-link:active {
+  box-shadow: none;
 }
 
 p.lead.text-muted {
@@ -67,6 +82,10 @@ p.lead.text-muted {
 }
 
 .form-check-input:focus {
+  box-shadow: none;
+}
+
+.form-check-input:focus-visible {
   box-shadow: 0 0 0 0.2rem rgba(0, 118, 168, 0.25);
   border-color: #66b8df;
 }
