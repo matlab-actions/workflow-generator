@@ -3,7 +3,7 @@ function parseRepositoryURL(repoURL) {
 
   // SSH and git protocol (e.g., git@github.com:owner/repo or git://host/owner/repo)
   const m = repoURL.match(
-    /^(git@|ssh:\/\/git@|git:\/\/)([^:/]+)[:\/]((?:[^/]+\/)+[^/]+)$/i,
+    /^(git@|ssh:\/\/git@|git:\/\/)([^:/]+)[:/]((?:[^/]+\/)+[^/]+)$/i,
   );
   if (m) {
     const host = m[2];
@@ -83,7 +83,7 @@ function parseRepositoryURL(repoURL) {
         repo: parts[1],
       };
     }
-  } catch (e) {
+  } catch {
     // Not a valid URL, fall through
   }
 
