@@ -54,11 +54,10 @@ function parseRepositoryURL(repoURL) {
   // HTTP(S) URLs (e.g., https://github.com/owner/repo)
   try {
     const url = new URL(repoURL);
-    const host = url.host;
     const parts = url.pathname.split("/").filter(Boolean);
     // GitHub Enterprise HTTP URL: https://github.com/enterprises/enterprise/owner/repo
     if (
-      host.toLowerCase() === "github.com" &&
+      url.host.toLowerCase() === "github.com" &&
       parts[0] === "enterprises" &&
       parts.length >= 4
     ) {
