@@ -35,14 +35,7 @@ function parseRepositoryURL(repoURL) {
   // Shorthand and domain/owner/repo (e.g., owner/repo or host/owner/repo)
   if (!/^\w+:\/\//.test(repoURL)) {
     const parts = repoURL.split("/").filter(Boolean);
-    if (parts.length === 2 && parts[0].includes(".")) {
-      // host/owner (missing repo)
-      return {
-        origin: `https://${parts[0]}`,
-        owner: parts[1],
-        repo: parts[2], // will be undefined, so will be caught below
-      };
-    } else if (parts.length === 2) {
+    if (parts.length === 2) {
       // owner/repo shorthand (assume github.com)
       return {
         origin: "https://github.com",
