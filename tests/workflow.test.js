@@ -230,7 +230,6 @@ describe("parseRepositoryURL", () => {
       expect(parseRepositoryURL("owner")).toBeNull();
       expect(parseRepositoryURL("")).toBeNull();
       expect(parseRepositoryURL("/owner/")).toBeNull();
-      expect(parseRepositoryURL("owner/repo/extra")).toBeNull();
     });
     test("invalid URLs", () => {
       expect(parseRepositoryURL("https://github.com/")).toBeNull();

@@ -1,66 +1,34 @@
 function parseRepositoryURL(repoURL) {
+  // Remove any trailing .git suffix and trim whitespace
   repoURL = repoURL.trim().replace(/\.git$/i, "");
 
-  // SSH and git protocol (e.g., git@github.com:owner/repo or git://host/owner/repo)
-  const m = repoURL.match(
-    /^(git@|ssh:\/\/git@|git:\/\/)([^:/]+)[:/]((?:[^/]+\/)+[^/]+)$/i,
-  );
+  // Normalize all input to HTTP(S) URL for easier parsing
+  let m = repoURL.match(/^(git@|ssh:\/\/git@|git:\/\/)([^:/]+)[:\/]((?:[^/]+\/)+[^/]+)$/i);
   if (m) {
-    const host = m[2];
-    const parts = m[3].split("/").filter(Boolean);
-    // GitHub Enterprise SSH URL: git@github.com:enterprises/enterprise/owner/repo
-    if (
-      host.toLowerCase() === "github.com" &&
-      parts[0] === "enterprises" &&
-      parts.length >= 4
-    ) {
-      return {
-        origin: `https://github.com`,
-        enterprise: parts[1],
-        owner: parts[2],
-        repo: parts[3],
-      };
-    } else if (parts.length === 2) {
-      // Standard SSH URL: git@host:owner/repo
-      return {
-        origin: `https://${host}`,
-        owner: parts[0],
-        repo: parts[1],
-      };
-    }
-    // Unrecognized SSH format
-    return null;
-  }
-
-  // Shorthand and domain/owner/repo (e.g., owner/repo or host/owner/repo)
-  if (!/^\w+:\/\//.test(repoURL)) {
+    // SSH or git: git@github.com:owner/repo or ssh://git@github.com/owner/repo or git://github.com/owner/repo
+    repoURL = `https://${m[2]}/${m[3]}`;
+  } else if (!/^\w+:\/\//.test(repoURL)) {
+    // Shorthand: owner/repo or host/owner/repo
     const parts = repoURL.split("/").filter(Boolean);
-    if (parts.length === 2) {
-      // owner/repo shorthand (assume github.com)
-      return {
-        origin: "https://github.com",
-        owner: parts[0],
-        repo: parts[1],
-      };
-    } else if (parts.length >= 3 && parts[0].includes(".")) {
-      // treat as URL, fall through to URL parsing
-      repoURL = "https://" + repoURL;
-    } else {
-      // Unrecognized shorthand
-      return null;
+    if (parts.length >= 3 && parts[0].includes(".")) {
+      // host/owner/repo
+      repoURL = `https://${repoURL}`;
+    } else if (parts.length >= 2 && !parts[0].includes(".")) {
+      // owner/repo
+      repoURL = `https://github.com/${parts[0]}/${parts[1]}`;
     }
   }
 
-  // HTTP(S) URLs (e.g., https://github.com/owner/repo)
+  // Parse the normalized URL and extract components
   try {
     const url = new URL(repoURL);
     const parts = url.pathname.split("/").filter(Boolean);
-    // GitHub Enterprise HTTP URL: https://github.com/enterprises/enterprise/owner/repo
     if (
       url.host.toLowerCase() === "github.com" &&
       parts[0] === "enterprises" &&
       parts.length >= 4
     ) {
+      // Enterprise: http(s)://github.com/enterprises/enterprise/owner/repo
       return {
         origin: url.origin,
         enterprise: parts[1],
@@ -68,7 +36,7 @@ function parseRepositoryURL(repoURL) {
         repo: parts[3],
       };
     } else if (parts.length >= 2) {
-      // Standard HTTP(S) URL: https://host/owner/repo
+      // Standard: http(s)://host/owner/repo
       return {
         origin: url.origin,
         owner: parts[0],
@@ -76,10 +44,8 @@ function parseRepositoryURL(repoURL) {
       };
     }
   } catch {
-    // Not a valid URL, fall through
+    // Not a valid URL
   }
-
-  // If none of the above matched, return null
   return null;
 }
 
