@@ -118,3 +118,12 @@ p.lead.text-muted {
 .bi-question-circle {
   color: #0076a8;
 }
+
+#download-alert {
+  text-align: center;
+  position: fixed;
+  top: 5px;
+  left: 2%;
+  width: 96%;
+  z-index: 2000;
+}
