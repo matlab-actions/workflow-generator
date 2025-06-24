@@ -10,12 +10,12 @@ beforeEach(async () => {
   global.URL.revokeObjectURL = jest.fn();
 
   document.body.innerHTML = `
-    <form id="generateForm">
+    <form id="generate-form">
       <input id="repo" />
-      <input type="checkbox" id="useBatchToken" />
-      <input type="checkbox" id="useVirtualDisplay" />
-      <input type="checkbox" id="buildAcrossPlatforms" />
-      <button type="submit" id="generateButton"></button>
+      <input type="checkbox" id="use-batch-token" />
+      <input type="checkbox" id="use-virtual-display" />
+      <input type="checkbox" id="build-across-platforms" />
+      <button type="submit" id="generate-button"></button>
     </form>
     <a id="downloadButton"></a>
   `;
@@ -29,7 +29,7 @@ test("form submit with invalid repo shows error", () => {
   expect(repoInput.classList.contains("is-invalid")).toBe(false);
   repoInput.value = "invalidrepo";
   document
-    .getElementById("generateForm")
+    .getElementById("generate-form")
     .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
   expect(repoInput.classList.contains("is-invalid")).toBe(true);
   expect(window.navigateTo).not.toHaveBeenCalled();
@@ -39,7 +39,7 @@ test("form submit with valid slug works", () => {
   const repoInput = document.getElementById("repo");
   repoInput.value = "owner/repo";
   document
-    .getElementById("generateForm")
+    .getElementById("generate-form")
     .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
   expect(window.navigateTo).toHaveBeenCalledWith(
     expect.stringContaining("https://github.com/owner/repo/new/main?filename="),
@@ -50,7 +50,7 @@ test("form submit with valid URL works", () => {
   const repoInput = document.getElementById("repo");
   repoInput.value = "https://github.com/octocat/Hello-World";
   document
-    .getElementById("generateForm")
+    .getElementById("generate-form")
     .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
   expect(window.navigateTo).toHaveBeenCalledWith(
     expect.stringContaining(
@@ -63,18 +63,13 @@ test("form submit with valid cloud-hosted enterprise URL works", () => {
   const repoInput = document.getElementById("repo");
   repoInput.value = "https://github.com/enterprises/gh/octocat/Hello-World";
   document
-    .getElementById("generateForm")
+    .getElementById("generate-form")
     .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
   expect(window.navigateTo).toHaveBeenCalledWith(
     expect.stringContaining(
       "https://github.com/enterprises/gh/octocat/Hello-World/new/main?filename=",
     ),
   );
-});
-
-test("download button triggers download", () => {
-  document.getElementById("downloadButton").click();
-  expect(global.URL.createObjectURL).toHaveBeenCalled();
 });
 
 test("advanced options are passed to generateWorkflow", async () => {
@@ -87,13 +82,13 @@ test("advanced options are passed to generateWorkflow", async () => {
   }));
   window.jsyaml = { dump: () => "yaml-content" };
   document.getElementById("repo").value = "o/r";
-  document.getElementById("useBatchToken").checked = true;
-  document.getElementById("useVirtualDisplay").checked = false;
-  document.getElementById("buildAcrossPlatforms").checked = true;
+  document.getElementById("use-batch-token").checked = true;
+  document.getElementById("use-virtual-display").checked = false;
+  document.getElementById("build-across-platforms").checked = true;
   await import("../public/scripts/main.js");
   window.navigateTo = jest.fn();
   document
-    .getElementById("generateForm")
+    .getElementById("generate-form")
     .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
   expect(workflowSpy).toHaveBeenCalledWith({
     useBatchToken: true,

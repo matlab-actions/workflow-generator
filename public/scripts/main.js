@@ -8,9 +8,9 @@ window.navigateTo = navigateTo;
 
 function generateWorkflowWithFormInputs() {
   return generateWorkflow({
-    useBatchToken: document.getElementById("useBatchToken").checked,
-    useVirtualDisplay: document.getElementById("useVirtualDisplay").checked,
-    buildAcrossPlatforms: document.getElementById("buildAcrossPlatforms")
+    useBatchToken: document.getElementById("use-batch-token").checked,
+    useVirtualDisplay: document.getElementById("use-virtual-display").checked,
+    buildAcrossPlatforms: document.getElementById("build-across-platforms")
       .checked,
     jsyaml: window.jsyaml,
     siteUrl:
@@ -43,26 +43,9 @@ function handleFormSubmit(e) {
   window.navigateTo(url);
 }
 
-function handleDownloadClick(e) {
-  e.preventDefault();
-
-  const workflow = generateWorkflowWithFormInputs();
-
-  const blob = new Blob([workflow], { type: "text/yaml" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "matlab.yml";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
 document
-  .getElementById("generateForm")
+  .getElementById("generate-form")
   .addEventListener("submit", handleFormSubmit);
-document
-  .getElementById("downloadButton")
-  ?.addEventListener("click", handleDownloadClick);
 
 document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
   new bootstrap.Tooltip(el);

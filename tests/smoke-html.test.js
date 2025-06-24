@@ -11,5 +11,5 @@ test("index.html renders the form", () => {
     "utf8",
   );
   document.documentElement.innerHTML = html;
-  expect(document.getElementById("generateForm")).not.toBeNull();
+  expect(document.getElementById("generate-form")).not.toBeNull();
 });

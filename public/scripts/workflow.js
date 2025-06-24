@@ -3,7 +3,9 @@ function parseRepositoryURL(repoURL) {
   repoURL = repoURL.trim().replace(/\.git$/i, "");
 
   // Normalize all input to HTTP(S) URL for easier parsing
-  let m = repoURL.match(/^(git@|ssh:\/\/git@|git:\/\/)([^:/]+)[:\/]((?:[^/]+\/)+[^/]+)$/i);
+  let m = repoURL.match(
+    /^(git@|ssh:\/\/git@|git:\/\/)([^:/]+)[:/]((?:[^/]+\/)+[^/]+)$/i,
+  );
   if (m) {
     // SSH or git: git@github.com:owner/repo or ssh://git@github.com/owner/repo or git://github.com/owner/repo
     repoURL = `https://${m[2]}/${m[3]}`;
