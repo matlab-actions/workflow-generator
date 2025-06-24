@@ -4,8 +4,9 @@
   "description": "GitHub Actions Workflow Generator for MATLAB website",
   "type": "module",
   "scripts": {
-    "lint": "eslint public/scripts/ --ext .js",
+    "precommit": "npm run format && npm run lint && npm run test",
     "format": "prettier --write .",
+    "lint": "eslint public/scripts/ --ext .js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "jest": {
