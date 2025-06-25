@@ -4,7 +4,6 @@ beforeEach(async () => {
   jest.resetModules();
   jest.clearAllMocks();
 
-  window.jsyaml = { dump: () => "yaml-content" };
   window.bootstrap = { Tooltip: jest.fn() };
   global.URL.createObjectURL = jest.fn(() => "blob:url");
   global.URL.revokeObjectURL = jest.fn();
@@ -81,7 +80,6 @@ test("advanced options are passed to generateWorkflow", async () => {
     parseRepositoryURL: (v) => ({ owner: "o", repo: "r" }),
     generateWorkflow: workflowSpy,
   }));
-  window.jsyaml = { dump: () => "yaml-content" };
   document.getElementById("repo").value = "o/r";
   document.getElementById("use-batch-token").checked = true;
   document.getElementById("use-virtual-display").checked = false;
@@ -96,15 +94,12 @@ test("advanced options are passed to generateWorkflow", async () => {
     useVirtualDisplay: false,
     buildAcrossPlatforms: true,
     siteUrl: "http://localhost",
-    jsyaml: window.jsyaml,
   });
 });
 
 test("download link triggers file download", () => {
   const repoInput = document.getElementById("repo");
   repoInput.value = "owner/repo";
-
-  window.jsyaml = { dump: () => "yaml-content" };
 
   const mockCreateObjectURL = jest.fn(() => "blob:url");
   const mockRevokeObjectURL = jest.fn();
