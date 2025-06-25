@@ -17,7 +17,8 @@ beforeEach(async () => {
       <input type="checkbox" id="build-across-platforms" />
       <button type="submit" id="generate-button"></button>
     </form>
-    <a id="downloadButton"></a>
+    <a id="download-alert-link"></a>
+    <div id="download-alert" class="d-none"></div>
   `;
 
   await import("../public/scripts/main.js");
@@ -97,4 +98,30 @@ test("advanced options are passed to generateWorkflow", async () => {
     siteUrl: "http://localhost",
     jsyaml: window.jsyaml,
   });
+});
+
+test("download link triggers file download", () => {
+  const repoInput = document.getElementById("repo");
+  repoInput.value = "owner/repo";
+
+  window.jsyaml = { dump: () => "yaml-content" };
+
+  const mockCreateObjectURL = jest.fn(() => "blob:url");
+  const mockRevokeObjectURL = jest.fn();
+  global.URL.createObjectURL = mockCreateObjectURL;
+  global.URL.revokeObjectURL = mockRevokeObjectURL;
+
+  const a = document.createElement("a");
+  document.body.appendChild(a);
+  jest.spyOn(document, "createElement").mockImplementation((tag) => {
+    if (tag === "a") return a;
+    return document.createElement(tag);
+  });
+  const clickSpy = jest.spyOn(a, "click");
+
+  document.getElementById("download-alert-link").click();
+
+  expect(mockCreateObjectURL).toHaveBeenCalled();
+  expect(clickSpy).toHaveBeenCalled();
+  expect(mockRevokeObjectURL).toHaveBeenCalled();
 });
