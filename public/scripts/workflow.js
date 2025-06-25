@@ -74,7 +74,7 @@ function generateWorkflow({
       ? `
   env:
     # To use a batch token in this workflow, first create an MLM_LICENSE_TOKEN secret in your repository settings.
-    # https://github.com/matlab-actions/setup-matlab/#use-matlab-batch-licensing-token
+    # See https://github.com/matlab-actions/setup-matlab/#use-matlab-batch-licensing-token
     MLM_LICENSE_TOKEN: \${{ secrets.MLM_LICENSE_TOKEN }}
     `
       : ``
