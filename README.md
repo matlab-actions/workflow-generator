@@ -6,9 +6,13 @@ To generate a starter workflow for your repository, in the workflow generation i
 
 1. Enter your GitHub repository URL or username/repository. 
 2. (Optional) Under **Advanced Options**, select one or more options to customize the workflow. 
-3. Click **Generate Workflow**. 
+3. Click **Generate Workflow**.
 
-<img src="https://github.com/user-attachments/assets/508d226f-b1b2-4128-aee0-6276094dfae0" width="50%" height="50%">
+<p align="center">
+  <a href="https://matlab-actions.github.io/workflow-generator/">
+    <img width="441" src="https://github.com/user-attachments/assets/249adf65-3eb1-4d83-97f0-ee1ac0f6fa2c" />
+  </a>
+</p>
 
 The workflow generator automatically displays the starter workflow in the workflow editor of your repository. Modify the generated workflow as needed, and commit your changes to save the workflow file in the `.github/workflows` directory of your repository.
 
