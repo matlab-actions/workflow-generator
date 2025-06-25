@@ -111,7 +111,7 @@ function generateWorkflow({
         - name: Set up MATLAB
           uses: matlab-actions/setup-matlab@v2
           with:
-            # Set up additional products using the 'products' input.
+            # Set up additional products using the products input.
             # See https://github.com/matlab-actions/setup-matlab/#set-up-matlab
             # products: Simulink Deep_Learning_Toolbox
             cache: true
@@ -119,13 +119,13 @@ function generateWorkflow({
         - name: Run MATLAB tests
           uses: matlab-actions/run-tests@v2
 
-        # Use run-build to invoke the MATLAB build tool if you have a buildfile.m.
+        # Use the run-build action to run the tasks in your buildfile.m.
         # - name: Run MATLAB build
         #   uses: matlab-actions/run-build@v2
         #   with:
         #     tasks: test
 
-        # Use run-command to run MATLAB scripts, functions, and statements.
+        # Use the run-command action to run MATLAB scripts, functions, and statements.
         # - name: Run MATLAB command
         #   uses: matlab-actions/run-command@v2
         #   with:
