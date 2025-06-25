@@ -118,6 +118,18 @@ function generateWorkflow({
 
         - name: Run MATLAB tests
           uses: matlab-actions/run-tests@v2
+
+        # Use run-build to invoke the MATLAB build tool if you have a buildfile.m.
+        # - name: Run MATLAB build
+        #   uses: matlab-actions/run-build@v2
+        #   with:
+        #     tasks: test
+
+        # Use run-command to run MATLAB scripts, functions, and statements.
+        # - name: Run MATLAB command
+        #   uses: matlab-actions/run-command@v2
+        #   with:
+        #     command: results = runtests('IncludeSubfolders',true); assertSuccess(results);
   `);
 }
 
