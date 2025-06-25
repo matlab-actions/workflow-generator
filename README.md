@@ -10,7 +10,7 @@ To generate a starter workflow for your repository, in the workflow generation i
 
 <p align="center">
   <a href="https://matlab-actions.github.io/workflow-generator/">
-    <img width="521" src="https://github.com/user-attachments/assets/c1f06630-9ebe-4214-9354-b1291b153c4c" />
+    <img width="441" src="https://github.com/user-attachments/assets/e242e520-ebe7-48bf-bc8b-ebbd7ab666a9" />
   </a>
 </p>
 
