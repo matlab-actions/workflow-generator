@@ -4,7 +4,7 @@ Use [GitHub&reg; Actions Workflow Generator for MATLAB](https://matlab-actions.g
 
 To generate a starter workflow for your repository, in the workflow generation interface:
 
-1. Enter either your GitHub username followed by your repository name, or provide the full URL of your repository. 
+1. Enter your repository URL or GitHub username and repository. 
 2. (Optional) Under **Advanced Options**, select one or more options to customize the workflow. 
 3. Click **Generate Workflow**. 
 
