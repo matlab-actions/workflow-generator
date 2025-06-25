@@ -118,14 +118,17 @@ function generateWorkflow({
 
         - name: Run MATLAB tests
           uses: matlab-actions/run-tests@v2
+          # If you are not using a MATLAB project, add your source code to the path using the source-folder input.
+          # with:
+          #   source-folder: myfolderA; myfolderB
 
-        # Use the run-build action to run the tasks in your buildfile.m.
+        # Alternatively, use the run-build action to run the tasks in your buildfile.m.
         # - name: Run MATLAB build
         #   uses: matlab-actions/run-build@v2
         #   with:
         #     tasks: test
 
-        # Use the run-command action to run MATLAB scripts, functions, and statements.
+        # Alternatively, use the run-command action to run MATLAB scripts, functions, and statements.
         # - name: Run MATLAB command
         #   uses: matlab-actions/run-command@v2
         #   with:
