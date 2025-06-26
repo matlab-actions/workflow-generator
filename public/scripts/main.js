@@ -12,7 +12,6 @@ function generateWorkflowWithFormInputs() {
     useVirtualDisplay: document.getElementById("use-virtual-display").checked,
     buildAcrossPlatforms: document.getElementById("build-across-platforms")
       .checked,
-    jsyaml: window.jsyaml,
     siteUrl:
       window.location.origin + window.location.pathname.replace(/\/[^/]*$/, ""),
   });

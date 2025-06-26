@@ -1,12 +1,8 @@
 import {
   parseRepositoryURL,
-  generateWorkflow as _generateWorkflow,
+  generateWorkflow,
 } from "../public/scripts/workflow.js";
 import jsyaml from "js-yaml";
-
-function generateWorkflow(options = {}) {
-  return _generateWorkflow({ ...options, jsyaml });
-}
 
 describe("parseRepositoryURL", () => {
   describe("valid slugs and URLs", () => {

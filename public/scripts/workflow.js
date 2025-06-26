@@ -56,108 +56,90 @@ function generateWorkflow({
   useVirtualDisplay = false,
   buildAcrossPlatforms = false,
   siteUrl = "http://localhost/",
-  jsyaml,
 }) {
-  const yamlObject = {
-    name: "MATLAB",
-    on: {
-      push: {
-        branches: ["main"],
-      },
-      pull_request: {
-        branches: ["main"],
-      },
-      workflow_dispatch: {},
-    },
-    ...(useBatchToken && {
-      env: {
-        MLM_LICENSE_TOKEN: "${{ secrets.MLM_LICENSE_TOKEN }}",
-      },
-    }),
-    jobs: {
-      build: {
-        ...(buildAcrossPlatforms
-          ? {
-              strategy: {
-                "fail-fast": false,
-                matrix: {
-                  os: ["ubuntu-latest", "windows-latest", "macos-latest"],
-                },
-              },
-              "runs-on": "${{ matrix.os }}",
-            }
-          : {
-              "runs-on": "ubuntu-latest",
-            }),
-        steps: [
-          {
-            uses: "actions/checkout@v4",
-          },
-          ...(useVirtualDisplay
-            ? [
-                {
-                  name: "Start virtual display server",
-                  if: "runner.os == 'Linux'",
-                  run: [
-                    "sudo apt-get install -y xvfb",
-                    "Xvfb :99 &",
-                    'echo "DISPLAY=:99" >> $GITHUB_ENV',
-                  ].join("\n"),
-                },
-              ]
-            : []),
-          {
-            name: "Set up MATLAB",
-            uses: "matlab-actions/setup-matlab@v2",
-            with: {
-              release: "latest",
-              products: "Simulink Deep_Learning_Toolbox",
-              cache: "true",
-            },
-          },
-          {
-            name: "Run MATLAB tests",
-            uses: "matlab-actions/run-tests@v2",
-          },
-        ],
-      },
-    },
-  };
+  return dedent(`
+  # This workflow was generated using the GitHub Actions Workflow Generator for MATLAB.
+  # See ${siteUrl}
 
-  let yaml = jsyaml.dump(yamlObject, {
-    lineWidth: -1,
-    noCompatMode: true,
-  });
-  yaml =
-    `# This workflow was generated using the GitHub Actions Workflow Generator for MATLAB.\n` +
-    `# ${siteUrl}\n\n` +
-    yaml
-      .replace(
-        /^(\s*)(MLM_LICENSE_TOKEN: .*)/m,
-        "$1# To use a batch token in this workflow, first create an MLM_LICENSE_TOKEN secret in your repository settings.\n" +
-          "$1# https://github.com/matlab-actions/setup-matlab/#use-matlab-batch-licensing-token\n" +
-          "$1$2",
-      ) // comment above MLM_LICENSE_TOKEN
-      .replace(
-        /^(\s*)products:/m,
-        "$1# Set up additional products using the `products` input.\n" +
-          "$1# https://github.com/matlab-actions/setup-matlab/#set-up-matlab\n" +
-          "$1# products:",
-      ) // comment out products and add comment above
-      .replace(/^'on':/m, "on:") // unquote 'on'
-      .replace(/'true'/g, "true") // unquote 'true'
-      .replace(/branches:\n\s*-\s*(\w+)/g, "branches: [$1]") // inline branches
-      .replace(
-        /os:\n\s*-\s*(\S+)\n\s*-\s*(\S+)\n\s*-\s*(\S+)/,
-        "os: [$1, $2, $3]",
-      ) // inline os matrix
-      .replace(/^(on:)/m, "\n$1") // blank before 'on:'
-      .replace(/^(env:)/m, "\n$1") // blank before 'env:'
-      .replace(/^(jobs:)/m, "\n$1") // blank before 'jobs:'
-      .replace(/^(\s*)steps:/gm, "\n$1steps:") // blank before 'steps:'
-      .replace(/^(\s*)- name:/gm, "\n$1- name:"); // blank before '- name:'
+  name: MATLAB
 
-  return yaml;
+  on:
+    push:
+      branches: [main]
+    pull_request:
+      branches: [main]
+    workflow_dispatch: {}
+  ${
+    useBatchToken
+      ? `
+  env:
+    # To use a batch token in this workflow, first create an MLM_LICENSE_TOKEN secret in your repository settings.
+    # See https://github.com/matlab-actions/setup-matlab/#use-matlab-batch-licensing-token
+    MLM_LICENSE_TOKEN: \${{ secrets.MLM_LICENSE_TOKEN }}
+    `
+      : ``
+  }
+  jobs:
+    build:
+      ${
+        buildAcrossPlatforms
+          ? `
+      strategy:
+        fail-fast: false
+        matrix:
+          os: [ubuntu-latest, windows-latest, macos-latest]
+      runs-on: \${{ matrix.os }}
+      `.trimStart()
+          : `
+      runs-on: ubuntu-latest
+      `.trimStart()
+      }
+      steps:
+        - uses: actions/checkout@v4
+        ${
+          useVirtualDisplay
+            ? `
+        - name: Start virtual display server
+          if: runner.os == 'Linux'
+          run: |
+            sudo apt-get install -y xvfb
+            Xvfb :99 &
+            echo "DISPLAY=:99" >> $GITHUB_ENV
+        `
+            : ``
+        }
+        - name: Set up MATLAB
+          uses: matlab-actions/setup-matlab@v2
+          with:
+            # Set up additional products using the products input.
+            # See https://github.com/matlab-actions/setup-matlab/#set-up-matlab
+            # products: Simulink Deep_Learning_Toolbox
+            cache: true
+
+        - name: Run MATLAB tests
+          uses: matlab-actions/run-tests@v2
+          # If you are not using a MATLAB project, add your source code to the path using the source-folder input.
+          # with:
+          #   source-folder: myfolderA; myfolderB
+
+        # Alternatively, use the run-build action to run the tasks in your buildfile.m.
+        # - name: Run MATLAB build
+        #   uses: matlab-actions/run-build@v2
+        #   with:
+        #     tasks: test
+
+        # Alternatively, use the run-command action to run MATLAB scripts, functions, and statements.
+        # - name: Run MATLAB command
+        #   uses: matlab-actions/run-command@v2
+        #   with:
+        #     command: results = runtests('IncludeSubfolders',true); assertSuccess(results);
+  `);
+}
+
+function dedent(str) {
+  str = str.replace(/^\n/, "");
+  let match = str.match(/^\s+/);
+  return match ? str.replace(new RegExp("^" + match[0], "gm"), "") : str;
 }
 
 export { parseRepositoryURL, generateWorkflow };
