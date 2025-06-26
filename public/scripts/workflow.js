@@ -108,27 +108,30 @@ function generateWorkflow({
         `
             : ``
         }
+        # Set up MATLAB and other MathWorks products on the runner.
         - name: Set up MATLAB
           uses: matlab-actions/setup-matlab@v2
           with:
+            release: latest
+            cache: true
             # Set up additional products using the products input.
             # See https://github.com/matlab-actions/setup-matlab/#set-up-matlab
             # products: Simulink Deep_Learning_Toolbox
-            cache: true
 
+        # Run tests authored using the MATLAB unit testing framework or Simulink Test.
         - name: Run MATLAB tests
           uses: matlab-actions/run-tests@v2
           # If you are not using a MATLAB project, add your source code to the path using the source-folder input.
           # with:
           #   source-folder: myfolderA; myfolderB
 
-        # Alternatively, use the run-build action to run the tasks in your buildfile.m.
+        # Alternatively, run tasks from your buildfile.m.
         # - name: Run MATLAB build
         #   uses: matlab-actions/run-build@v2
         #   with:
         #     tasks: test
 
-        # Alternatively, use the run-command action to run MATLAB scripts, functions, and statements.
+        # Alternatively, run MATLAB scripts, functions, and statements.
         # - name: Run MATLAB command
         #   uses: matlab-actions/run-command@v2
         #   with:
