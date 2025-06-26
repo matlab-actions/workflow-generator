@@ -125,7 +125,7 @@ function generateWorkflow({
           # with:
           #   source-folder: myfolderA; myfolderB
 
-        # Alternatively, run tasks in your buildfile.m.
+        # Alternatively, run tasks from your buildfile.m.
         # - name: Run MATLAB build
         #   uses: matlab-actions/run-build@v2
         #   with:
