@@ -288,7 +288,9 @@ describe("detectDefaultBranch", () => {
   });
 
   test("detects 'main' branch", async () => {
-    global.fetch = jest.fn().mockResolvedValue({ ok: true });
+    global.fetch = jest.fn().mockImplementation((url) => {
+      return Promise.resolve({ ok: url.includes("main") });
+    });
     const { detectDefaultBranch } = await import(
       "../public/scripts/workflow.js"
     );
@@ -298,10 +300,9 @@ describe("detectDefaultBranch", () => {
   });
 
   test("detects 'master' branch", async () => {
-    global.fetch = jest
-      .fn()
-      .mockResolvedValueOnce({ ok: false })
-      .mockResolvedValueOnce({ ok: true });
+    global.fetch = jest.fn().mockImplementation((url) => {
+      return Promise.resolve({ ok: url.includes("master") });
+    });
     const { detectDefaultBranch } = await import(
       "../public/scripts/workflow.js"
     );
@@ -311,11 +312,9 @@ describe("detectDefaultBranch", () => {
   });
 
   test("detects 'develop' branch", async () => {
-    global.fetch = jest
-      .fn()
-      .mockResolvedValueOnce({ ok: false })
-      .mockResolvedValueOnce({ ok: false })
-      .mockResolvedValueOnce({ ok: true });
+    global.fetch = jest.fn().mockImplementation((url) => {
+      return Promise.resolve({ ok: url.includes("develop") });
+    });
     const { detectDefaultBranch } = await import(
       "../public/scripts/workflow.js"
     );

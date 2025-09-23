@@ -51,7 +51,7 @@ function parseRepositoryURL(repoURL) {
   return null;
 }
 
-async function detectDefaultBranch(repoInfo) {
+async function detectDefaultBranch(repoInfo, timeoutMs = 3000) {
   if (!repoInfo) return null;
 
   let baseUrl = repoInfo.origin;
@@ -61,24 +61,24 @@ async function detectDefaultBranch(repoInfo) {
   baseUrl += `/${repoInfo.owner}/${repoInfo.repo}`;
 
   const branches = ["main", "master", "develop"];
-  for (const branch of branches) {
-    const webUrl = `${baseUrl}/blob/${branch}/README.md`;
+
+  function fetchWithTimeout(url, timeoutMs) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3000); // 3 seconds
-    try {
-      const resp = await fetch(webUrl, {
-        method: "HEAD",
-        signal: controller.signal,
-      });
-      clearTimeout(timeout);
-      if (resp.ok) return branch;
-    } catch {
-      // Ignore network errors and try next branch
-    } finally {
-      clearTimeout(timeout);
-    }
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    return fetch(url, { method: "HEAD", signal: controller.signal }).finally(
+      () => clearTimeout(timeout),
+    );
   }
-  return null;
+
+  const checks = branches.map((branch) => {
+    const webUrl = `${baseUrl}/blob/${branch}/README.md`;
+    return fetchWithTimeout(webUrl, timeoutMs)
+      .then((resp) => (resp && resp.ok ? branch : null))
+      .catch(() => null);
+  });
+
+  const results = await Promise.all(checks);
+  return results.find((branch) => branch !== null) || null;
 }
 
 function generateWorkflow({
