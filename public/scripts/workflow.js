@@ -33,6 +33,7 @@ function parseRepositoryURL(repoURL) {
       // Enterprise: http(s)://github.com/enterprises/enterprise/owner/repo
       return {
         origin: url.origin,
+        hostname: url.hostname,
         enterprise: parts[1],
         owner: parts[2],
         repo: parts[3],
@@ -41,6 +42,7 @@ function parseRepositoryURL(repoURL) {
       // Standard: http(s)://host/owner/repo
       return {
         origin: url.origin,
+        hostname: url.hostname,
         owner: parts[0],
         repo: parts[1],
       };
@@ -51,36 +53,81 @@ function parseRepositoryURL(repoURL) {
   return null;
 }
 
-async function detectDefaultBranch(repoInfo, timeoutMs = 3000) {
+async function detectDefaultBranch(repoInfo) {
   if (!repoInfo) return null;
 
-  let baseUrl = repoInfo.origin;
-  if (repoInfo.enterprise) {
-    baseUrl += `/enterprises/${repoInfo.enterprise}`;
-  }
-  baseUrl += `/${repoInfo.owner}/${repoInfo.repo}`;
-
-  const branches = ["main", "master", "develop"];
-
-  function fetchWithTimeout(url, timeoutMs) {
+  async function fetchWithTimeout(url, options = {}) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), timeoutMs);
-    return fetch(url, {
-      method: "HEAD",
-      signal: controller.signal,
-      redirect: "manual",
-    }).finally(() => clearTimeout(timeout));
+    const timeout = setTimeout(() => controller.abort(), 3000); // 3 seconds timeout
+    try {
+      const resp = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
+      return resp;
+    } finally {
+      clearTimeout(timeout);
+    }
   }
 
-  const checks = branches.map((branch) => {
-    const webUrl = `${baseUrl}/blob/${branch}/README.md`;
-    return fetchWithTimeout(webUrl, timeoutMs)
-      .then((resp) => (resp && resp.ok ? branch : null))
-      .catch(() => null);
-  });
+  // Try to detect default branch using the GitHub API
+  async function tryApi() {
+    let apiUrl;
+    if (repoInfo.hostname.replace(/^www\./, "") === "github.com") {
+      apiUrl = `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}`;
+    } else {
+      apiUrl = `${origin}/api/v3/repos/${repoInfo.owner}/${repoInfo.repo}`;
+    }
 
-  const results = await Promise.all(checks);
-  return results.find((branch) => branch !== null) || null;
+    try {
+      const resp = await fetchWithTimeout(apiUrl, {
+        headers: { Accept: "application/vnd.github+json" },
+      });
+
+      if (!resp.ok) return null;
+
+      const data = await resp.json();
+      return data.default_branch || null;
+    } catch {
+      // Network or abort error, fallback
+      return null;
+    }
+  }
+
+  // Fallback: Probe common branch names by checking for a README.md
+  async function tryBlobFallback() {
+    let repoBaseUrl;
+    if (repoInfo.hostname.replace(/^www\./, "") === "github.com") {
+      repoBaseUrl = "https://github.com";
+    } else {
+      repoBaseUrl = `${repoInfo.origin}`;
+    }
+    if (repoInfo.enterprise) {
+      repoBaseUrl += `/enterprises/${repoInfo.enterprise}`;
+    }
+    repoBaseUrl += `/${repoInfo.owner}/${repoInfo.repo}`;
+
+    const branches = ["main", "master", "develop"];
+    const checks = branches.map(async (branch) => {
+      const url = `${repoBaseUrl}/blob/${branch}/README.md`;
+      try {
+        const resp = await fetchWithTimeout(url, {
+          method: "HEAD",
+          redirect: "manual",
+        });
+        return resp.ok ? branch : null;
+      } catch {
+        return null;
+      }
+    });
+    const results = await Promise.all(checks);
+    return results.find((branch) => branch !== null) || null;
+  }
+
+  // Main logic: Try API first, then fallback if needed
+  const apiBranch = await tryApi();
+  if (apiBranch) return apiBranch;
+  return await tryBlobFallback();
 }
 
 function generateWorkflow({

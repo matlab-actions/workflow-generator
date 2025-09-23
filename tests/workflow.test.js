@@ -10,6 +10,7 @@ describe("parseRepositoryURL", () => {
     test("shorthand owner/repo", () => {
       expect(parseRepositoryURL("owner/repo")).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "owner",
         repo: "repo",
       });
@@ -19,6 +20,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("https://github.com/octocat/hello-world"),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -26,6 +28,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("http://github.com/octocat/hello-world"),
       ).toEqual({
         origin: "http://github.com",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -37,6 +40,7 @@ describe("parseRepositoryURL", () => {
         ),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         enterprise: "mycompany",
         owner: "octocat",
         repo: "hello-world",
@@ -45,6 +49,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("https://mycompany.github.com/octocat/hello-world"),
       ).toEqual({
         origin: "https://mycompany.github.com",
+        hostname: "mycompany.github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -52,6 +57,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("https://github.mycompany.com/octocat/hello-world"),
       ).toEqual({
         origin: "https://github.mycompany.com",
+        hostname: "github.mycompany.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -59,6 +65,7 @@ describe("parseRepositoryURL", () => {
     test("URLs without protocol", () => {
       expect(parseRepositoryURL("github.com/octocat/hello-world")).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -66,6 +73,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("mycompany.github.com/octocat/hello-world"),
       ).toEqual({
         origin: "https://mycompany.github.com",
+        hostname: "mycompany.github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -73,6 +81,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("github.mycompany.com/octocat/hello-world"),
       ).toEqual({
         origin: "https://github.mycompany.com",
+        hostname: "github.mycompany.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -82,6 +91,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("https://github.com/octocat/hello-world/"),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -89,6 +99,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("https://github.com/octocat/hello-world/README.md"),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -96,6 +107,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("https://github.com/octocat/hello-world.git"),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -108,6 +120,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("git@github.com:octocat/hello-world.git"),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -115,6 +128,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("ssh://git@github.com/octocat/hello-world.git"),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -124,6 +138,7 @@ describe("parseRepositoryURL", () => {
         ),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         enterprise: "mycompany",
         owner: "octocat",
         repo: "hello-world",
@@ -134,6 +149,7 @@ describe("parseRepositoryURL", () => {
         ),
       ).toEqual({
         origin: "https://mycompany.github.com",
+        hostname: "mycompany.github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -141,6 +157,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("git@github.mycompany.com:octocat/hello-world.git"),
       ).toEqual({
         origin: "https://github.mycompany.com",
+        hostname: "github.mycompany.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -150,6 +167,7 @@ describe("parseRepositoryURL", () => {
         ),
       ).toEqual({
         origin: "https://github.mycompany.com",
+        hostname: "github.mycompany.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -157,6 +175,7 @@ describe("parseRepositoryURL", () => {
     test("SSH URLs without .git", () => {
       expect(parseRepositoryURL("git@github.com:octocat/hello-world")).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -166,6 +185,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("git://github.com/octocat/hello-world.git"),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -173,6 +193,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("git://github.com/octocat/hello-world"),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -183,11 +204,13 @@ describe("parseRepositoryURL", () => {
     test("protocol/host case insensitivity, preserve owner/repo case", () => {
       expect(parseRepositoryURL("OWNER/REPO")).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "OWNER",
         repo: "REPO",
       });
       expect(parseRepositoryURL("GitHub.com/OctoCat/Hello-World")).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "OctoCat",
         repo: "Hello-World",
       });
@@ -195,6 +218,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("HTTPS://GITHUB.COM/OctoCat/Hello-World"),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "OctoCat",
         repo: "Hello-World",
       });
@@ -202,6 +226,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("git@github.com:OctoCat/Hello-World.git"),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "OctoCat",
         repo: "Hello-World",
       });
@@ -209,6 +234,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("ssh://git@github.com/OctoCat/Hello-World.git"),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "OctoCat",
         repo: "Hello-World",
       });
@@ -216,6 +242,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("git://github.com/OctoCat/Hello-World.git"),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "OctoCat",
         repo: "Hello-World",
       });
@@ -241,6 +268,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("https://github.com:8080/octocat/hello-world"),
       ).toEqual({
         origin: "https://github.com:8080",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -250,6 +278,7 @@ describe("parseRepositoryURL", () => {
         ),
       ).toEqual({
         origin: "https://github.mycompany.com:8080",
+        hostname: "github.mycompany.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -257,6 +286,7 @@ describe("parseRepositoryURL", () => {
     test("inputs with whitespace", () => {
       expect(parseRepositoryURL("  owner/repo  ")).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "owner",
         repo: "repo",
       });
@@ -264,6 +294,7 @@ describe("parseRepositoryURL", () => {
         parseRepositoryURL("  https://github.com/octocat/hello-world  "),
       ).toEqual({
         origin: "https://github.com",
+        hostname: "github.com",
         owner: "octocat",
         repo: "hello-world",
       });
@@ -287,48 +318,105 @@ describe("detectDefaultBranch", () => {
     expect(branch).toBeNull();
   });
 
-  test("detects 'main' branch", async () => {
+  test("detects default branch via GitHub API", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ default_branch: "main" }),
+    });
+    const { detectDefaultBranch } = await import(
+      "../public/scripts/workflow.js"
+    );
+    const repoInfo = {
+      origin: "https://github.com",
+      hostname: "github.com",
+      owner: "o",
+      repo: "r",
+    };
+    const branch = await detectDefaultBranch(repoInfo);
+    expect(branch).toBe("main");
+    expect(global.fetch).toHaveBeenCalledWith(
+      "https://api.github.com/repos/o/r",
+      expect.any(Object),
+    );
+  });
+
+  test("returns null if GitHub API response is not ok", async () => {
+    global.fetch = jest.fn().mockResolvedValue({ ok: false });
+    const { detectDefaultBranch } = await import(
+      "../public/scripts/workflow.js"
+    );
+    const repoInfo = {
+      origin: "https://github.com",
+      hostname: "github.com",
+      owner: "o",
+      repo: "r",
+    };
+    const branch = await detectDefaultBranch(repoInfo);
+    expect(branch).toBeNull();
+  });
+
+  test("detects 'main' branch on fallback", async () => {
     global.fetch = jest.fn().mockImplementation((url) => {
       return Promise.resolve({ ok: url.includes("main") });
     });
     const { detectDefaultBranch } = await import(
       "../public/scripts/workflow.js"
     );
-    const repoInfo = { origin: "https://github.com", owner: "o", repo: "r" };
+    const repoInfo = {
+      origin: "https://github.com",
+      hostname: "github.com",
+      owner: "o",
+      repo: "r",
+    };
     const branch = await detectDefaultBranch(repoInfo);
     expect(branch).toBe("main");
   });
 
-  test("detects 'master' branch", async () => {
+  test("detects 'master' branch on fallback", async () => {
     global.fetch = jest.fn().mockImplementation((url) => {
       return Promise.resolve({ ok: url.includes("master") });
     });
     const { detectDefaultBranch } = await import(
       "../public/scripts/workflow.js"
     );
-    const repoInfo = { origin: "https://github.com", owner: "o", repo: "r" };
+    const repoInfo = {
+      origin: "https://github.com",
+      hostname: "github.com",
+      owner: "o",
+      repo: "r",
+    };
     const branch = await detectDefaultBranch(repoInfo);
     expect(branch).toBe("master");
   });
 
-  test("detects 'develop' branch", async () => {
+  test("detects 'develop' branch on fallback", async () => {
     global.fetch = jest.fn().mockImplementation((url) => {
       return Promise.resolve({ ok: url.includes("develop") });
     });
     const { detectDefaultBranch } = await import(
       "../public/scripts/workflow.js"
     );
-    const repoInfo = { origin: "https://github.com", owner: "o", repo: "r" };
+    const repoInfo = {
+      origin: "https://github.com",
+      hostname: "github.com",
+      owner: "o",
+      repo: "r",
+    };
     const branch = await detectDefaultBranch(repoInfo);
     expect(branch).toBe("develop");
   });
 
-  test("returns null if no common branches found", async () => {
+  test("returns null if no fallback branches found", async () => {
     global.fetch = jest.fn().mockResolvedValue({ ok: false });
     const { detectDefaultBranch } = await import(
       "../public/scripts/workflow.js"
     );
-    const repoInfo = { origin: "https://github.com", owner: "o", repo: "r" };
+    const repoInfo = {
+      origin: "https://github.com",
+      hostname: "github.com",
+      owner: "o",
+      repo: "r",
+    };
     const branch = await detectDefaultBranch(repoInfo);
     expect(branch).toBeNull();
   });
@@ -338,7 +426,12 @@ describe("detectDefaultBranch", () => {
     const { detectDefaultBranch } = await import(
       "../public/scripts/workflow.js"
     );
-    const repoInfo = { origin: "https://github.com", owner: "o", repo: "r" };
+    const repoInfo = {
+      origin: "https://github.com",
+      hostname: "github.com",
+      owner: "o",
+      repo: "r",
+    };
     const branch = await detectDefaultBranch(repoInfo);
     expect(branch).toBeNull();
   });
