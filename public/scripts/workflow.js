@@ -51,11 +51,42 @@ function parseRepositoryURL(repoURL) {
   return null;
 }
 
+async function detectDefaultBranch(repoInfo) {
+  if (!repoInfo) return null;
+
+  let baseUrl = repoInfo.origin;
+  if (repoInfo.enterprise) {
+    baseUrl += `/enterprises/${repoInfo.enterprise}`;
+  }
+  baseUrl += `/${repoInfo.owner}/${repoInfo.repo}`;
+
+  const branches = ["main", "master", "develop"];
+  for (const branch of branches) {
+    const webUrl = `${baseUrl}/blob/${branch}/README.md`;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000); // 3 seconds
+    try {
+      const resp = await fetch(webUrl, {
+        method: "HEAD",
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+      if (resp.ok) return branch;
+    } catch {
+      // Ignore network errors and try next branch
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+  return null;
+}
+
 function generateWorkflow({
   useBatchToken = false,
   useVirtualDisplay = false,
   buildAcrossPlatforms = false,
   siteUrl = "http://localhost/",
+  branch = "main",
 }) {
   return dedent(`
   # This workflow was generated using the GitHub Actions Workflow Generator for MATLAB.
@@ -65,9 +96,9 @@ function generateWorkflow({
 
   on:
     push:
-      branches: [main]
+      branches: [${branch}]
     pull_request:
-      branches: [main]
+      branches: [${branch}]
     workflow_dispatch: {}
   ${
     useBatchToken
@@ -145,4 +176,4 @@ function dedent(str) {
   return match ? str.replace(new RegExp("^" + match[0], "gm"), "") : str;
 }
 
-export { parseRepositoryURL, generateWorkflow };
+export { parseRepositoryURL, detectDefaultBranch, generateWorkflow };

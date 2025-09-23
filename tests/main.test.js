@@ -20,38 +20,49 @@ beforeEach(async () => {
     <div id="download-alert" class="d-none"></div>
   `;
 
+  const realWorkflow = await import("../public/scripts/workflow.js");
+  jest.unstable_mockModule("../public/scripts/workflow.js", () => ({
+    ...realWorkflow,
+    detectDefaultBranch: jest.fn().mockResolvedValue("main"),
+  }));
+
   await import("../public/scripts/main.js");
   window.navigateTo = jest.fn();
 });
 
-test("form submit with invalid repo shows error", () => {
+const flushPromises = () => new Promise((r) => setTimeout(r, 0));
+
+test("form submit with invalid repo shows error", async () => {
   const repoInput = document.getElementById("repo");
   expect(repoInput.classList.contains("is-invalid")).toBe(false);
   repoInput.value = "invalidrepo";
   document
     .getElementById("generate-form")
     .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  await flushPromises();
   expect(repoInput.classList.contains("is-invalid")).toBe(true);
   expect(window.navigateTo).not.toHaveBeenCalled();
 });
 
-test("form submit with valid slug works", () => {
+test("form submit with valid slug works", async () => {
   const repoInput = document.getElementById("repo");
   repoInput.value = "owner/repo";
   document
     .getElementById("generate-form")
     .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  await flushPromises();
   expect(window.navigateTo).toHaveBeenCalledWith(
     expect.stringContaining("https://github.com/owner/repo/new/main?filename="),
   );
 });
 
-test("form submit with valid URL works", () => {
+test("form submit with valid URL works", async () => {
   const repoInput = document.getElementById("repo");
   repoInput.value = "https://github.com/octocat/Hello-World";
   document
     .getElementById("generate-form")
     .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  await flushPromises();
   expect(window.navigateTo).toHaveBeenCalledWith(
     expect.stringContaining(
       "https://github.com/octocat/Hello-World/new/main?filename=",
@@ -59,16 +70,61 @@ test("form submit with valid URL works", () => {
   );
 });
 
-test("form submit with valid cloud-hosted enterprise URL works", () => {
+test("form submit with valid cloud-hosted enterprise URL works", async () => {
   const repoInput = document.getElementById("repo");
   repoInput.value = "https://github.com/enterprises/gh/octocat/Hello-World";
   document
     .getElementById("generate-form")
     .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  await flushPromises();
   expect(window.navigateTo).toHaveBeenCalledWith(
     expect.stringContaining(
       "https://github.com/enterprises/gh/octocat/Hello-World/new/main?filename=",
     ),
+  );
+});
+
+test("form submit uses detected default branch", async () => {
+  jest.resetModules();
+  jest.unstable_mockModule("../public/scripts/workflow.js", () => ({
+    parseRepositoryURL: (v) => ({
+      origin: "https://github.com",
+      owner: "o",
+      repo: "r",
+    }),
+    detectDefaultBranch: jest.fn().mockResolvedValue("master"),
+    generateWorkflow: () => "yaml-content",
+  }));
+  await import("../public/scripts/main.js");
+  window.navigateTo = jest.fn();
+  document
+    .getElementById("generate-form")
+    .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  await flushPromises();
+  expect(window.navigateTo).toHaveBeenCalledWith(
+    expect.stringContaining("https://github.com/o/r/new/master?filename="),
+  );
+});
+
+test("form submit defaults to main branch if detection fails", async () => {
+  jest.resetModules();
+  jest.unstable_mockModule("../public/scripts/workflow.js", () => ({
+    parseRepositoryURL: (v) => ({
+      origin: "https://github.com",
+      owner: "o",
+      repo: "r",
+    }),
+    detectDefaultBranch: jest.fn().mockResolvedValue(null),
+    generateWorkflow: () => "yaml-content",
+  }));
+  await import("../public/scripts/main.js");
+  window.navigateTo = jest.fn();
+  document
+    .getElementById("generate-form")
+    .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  await flushPromises();
+  expect(window.navigateTo).toHaveBeenCalledWith(
+    expect.stringContaining("https://github.com/o/r/new/main?filename="),
   );
 });
 
@@ -78,6 +134,7 @@ test("advanced options are passed to generateWorkflow", async () => {
   const workflowSpy = jest.fn(() => "yaml-content");
   jest.unstable_mockModule("../public/scripts/workflow.js", () => ({
     parseRepositoryURL: (v) => ({ owner: "o", repo: "r" }),
+    detectDefaultBranch: jest.fn().mockResolvedValue("main"),
     generateWorkflow: workflowSpy,
   }));
   document.getElementById("repo").value = "o/r";
@@ -89,15 +146,17 @@ test("advanced options are passed to generateWorkflow", async () => {
   document
     .getElementById("generate-form")
     .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  await flushPromises();
   expect(workflowSpy).toHaveBeenCalledWith({
     useBatchToken: true,
     useVirtualDisplay: false,
     buildAcrossPlatforms: true,
     siteUrl: "http://localhost",
+    branch: "main",
   });
 });
 
-test("download link triggers file download", () => {
+test("download link triggers file download", async () => {
   const repoInput = document.getElementById("repo");
   repoInput.value = "owner/repo";
 
@@ -110,11 +169,13 @@ test("download link triggers file download", () => {
   document.body.appendChild(a);
   jest.spyOn(document, "createElement").mockImplementation((tag) => {
     if (tag === "a") return a;
-    return document.createElement(tag);
+    return originalCreateElement.call(document, tag);
   });
   const clickSpy = jest.spyOn(a, "click");
 
   document.getElementById("download-alert-link").click();
+
+  await flushPromises();
 
   expect(mockCreateObjectURL).toHaveBeenCalled();
   expect(clickSpy).toHaveBeenCalled();

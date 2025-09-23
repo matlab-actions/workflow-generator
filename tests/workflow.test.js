@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import {
   parseRepositoryURL,
   generateWorkflow,
@@ -267,6 +268,80 @@ describe("parseRepositoryURL", () => {
         repo: "hello-world",
       });
     });
+  });
+});
+
+describe("detectDefaultBranch", () => {
+  // Mock fetch globally for all tests in this suite
+  const originalFetch = global.fetch;
+  afterEach(() => {
+    global.fetch = originalFetch;
+    jest.clearAllMocks();
+  });
+
+  test("returns null for null input", async () => {
+    const { detectDefaultBranch } = await import(
+      "../public/scripts/workflow.js"
+    );
+    const branch = await detectDefaultBranch(null);
+    expect(branch).toBeNull();
+  });
+
+  test("detects 'main' branch", async () => {
+    global.fetch = jest.fn().mockResolvedValue({ ok: true });
+    const { detectDefaultBranch } = await import(
+      "../public/scripts/workflow.js"
+    );
+    const repoInfo = { origin: "https://github.com", owner: "o", repo: "r" };
+    const branch = await detectDefaultBranch(repoInfo);
+    expect(branch).toBe("main");
+  });
+
+  test("detects 'master' branch", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({ ok: false })
+      .mockResolvedValueOnce({ ok: true });
+    const { detectDefaultBranch } = await import(
+      "../public/scripts/workflow.js"
+    );
+    const repoInfo = { origin: "https://github.com", owner: "o", repo: "r" };
+    const branch = await detectDefaultBranch(repoInfo);
+    expect(branch).toBe("master");
+  });
+
+  test("detects 'develop' branch", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({ ok: false })
+      .mockResolvedValueOnce({ ok: false })
+      .mockResolvedValueOnce({ ok: true });
+    const { detectDefaultBranch } = await import(
+      "../public/scripts/workflow.js"
+    );
+    const repoInfo = { origin: "https://github.com", owner: "o", repo: "r" };
+    const branch = await detectDefaultBranch(repoInfo);
+    expect(branch).toBe("develop");
+  });
+
+  test("returns null if no common branches found", async () => {
+    global.fetch = jest.fn().mockResolvedValue({ ok: false });
+    const { detectDefaultBranch } = await import(
+      "../public/scripts/workflow.js"
+    );
+    const repoInfo = { origin: "https://github.com", owner: "o", repo: "r" };
+    const branch = await detectDefaultBranch(repoInfo);
+    expect(branch).toBeNull();
+  });
+
+  test("handles fetch errors gracefully", async () => {
+    global.fetch = jest.fn().mockRejectedValue(new Error("Network error"));
+    const { detectDefaultBranch } = await import(
+      "../public/scripts/workflow.js"
+    );
+    const repoInfo = { origin: "https://github.com", owner: "o", repo: "r" };
+    const branch = await detectDefaultBranch(repoInfo);
+    expect(branch).toBeNull();
   });
 });
 
