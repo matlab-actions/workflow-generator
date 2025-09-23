@@ -169,7 +169,7 @@ test("download link triggers file download", async () => {
   document.body.appendChild(a);
   jest.spyOn(document, "createElement").mockImplementation((tag) => {
     if (tag === "a") return a;
-    return originalCreateElement.call(document, tag);
+    return document.createElement(tag);
   });
   const clickSpy = jest.spyOn(a, "click");
 
