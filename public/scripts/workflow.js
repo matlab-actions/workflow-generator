@@ -65,9 +65,11 @@ async function detectDefaultBranch(repoInfo, timeoutMs = 3000) {
   function fetchWithTimeout(url, timeoutMs) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
-    return fetch(url, { method: "HEAD", signal: controller.signal }).finally(
-      () => clearTimeout(timeout),
-    );
+    return fetch(url, {
+      method: "HEAD",
+      signal: controller.signal,
+      redirect: "manual",
+    }).finally(() => clearTimeout(timeout));
   }
 
   const checks = branches.map((branch) => {
