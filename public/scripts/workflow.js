@@ -76,14 +76,13 @@ async function detectDefaultBranch(repoInfo) {
     if (repoInfo.hostname.replace(/^www\./, "") === "github.com") {
       apiUrl = `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}`;
     } else {
-      apiUrl = `${origin}/api/v3/repos/${repoInfo.owner}/${repoInfo.repo}`;
+      apiUrl = `${repoInfo.origin}/api/v3/repos/${repoInfo.owner}/${repoInfo.repo}`;
     }
 
     try {
       const resp = await fetchWithTimeout(apiUrl, {
         headers: { Accept: "application/vnd.github+json" },
       });
-
       if (!resp.ok) return null;
 
       const data = await resp.json();

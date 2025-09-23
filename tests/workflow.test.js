@@ -321,7 +321,7 @@ describe("detectDefaultBranch", () => {
   test("detects default branch via GitHub API", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve({ default_branch: "main" }),
+      json: () => Promise.resolve({ default_branch: "dev" }),
     });
     const { detectDefaultBranch } = await import(
       "../public/scripts/workflow.js"
@@ -333,9 +333,31 @@ describe("detectDefaultBranch", () => {
       repo: "r",
     };
     const branch = await detectDefaultBranch(repoInfo);
-    expect(branch).toBe("main");
+    expect(branch).toBe("dev");
     expect(global.fetch).toHaveBeenCalledWith(
       "https://api.github.com/repos/o/r",
+      expect.any(Object),
+    );
+  });
+
+  test("detects default branch via GitHub Enterprise API", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ default_branch: "dev" }),
+    });
+    const { detectDefaultBranch } = await import(
+      "../public/scripts/workflow.js"
+    );
+    const repoInfo = {
+      origin: "https://mycompany.github.com",
+      hostname: "mycompany.github.com",
+      owner: "o",
+      repo: "r",
+    };
+    const branch = await detectDefaultBranch(repoInfo);
+    expect(branch).toBe("dev");
+    expect(global.fetch).toHaveBeenCalledWith(
+      "https://mycompany.github.com/api/v3/repos/o/r",
       expect.any(Object),
     );
   });
