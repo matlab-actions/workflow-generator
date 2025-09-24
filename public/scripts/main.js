@@ -1,23 +1,16 @@
 /* global bootstrap */
-import { parseRepositoryURL, generateWorkflow } from "./workflow.js";
+import {
+  parseRepositoryURL,
+  detectDefaultBranch,
+  generateWorkflow,
+} from "./workflow.js";
 
 function navigateTo(url) {
   window.open(url, "_blank");
 }
 window.navigateTo = navigateTo;
 
-function generateWorkflowWithFormInputs() {
-  return generateWorkflow({
-    useBatchToken: document.getElementById("use-batch-token").checked,
-    useVirtualDisplay: document.getElementById("use-virtual-display").checked,
-    buildAcrossPlatforms: document.getElementById("build-across-platforms")
-      .checked,
-    siteUrl:
-      window.location.origin + window.location.pathname.replace(/\/[^/]*$/, ""),
-  });
-}
-
-function handleFormSubmit(e) {
+async function handleFormSubmit(e) {
   e.preventDefault();
 
   const repoField = document.getElementById("repo");
@@ -28,7 +21,18 @@ function handleFormSubmit(e) {
   }
   repoField.classList.remove("is-invalid");
 
-  const workflow = generateWorkflowWithFormInputs();
+  let branch = await detectDefaultBranch(repoInfo);
+  if (!branch) branch = "main";
+
+  const workflow = generateWorkflow({
+    useBatchToken: document.getElementById("use-batch-token").checked,
+    useVirtualDisplay: document.getElementById("use-virtual-display").checked,
+    buildAcrossPlatforms: document.getElementById("build-across-platforms")
+      .checked,
+    siteUrl:
+      window.location.origin + window.location.pathname.replace(/\/[^/]*$/, ""),
+    branch,
+  });
 
   const encoded = encodeURIComponent(workflow);
   const filePath = ".github/workflows/matlab.yml";
@@ -37,7 +41,7 @@ function handleFormSubmit(e) {
   if (repoInfo.enterprise) {
     url += `/enterprises/${repoInfo.enterprise}`;
   }
-  url += `/${repoInfo.owner}/${repoInfo.repo}/new/main?filename=${filePath}&value=${encoded}`;
+  url += `/${repoInfo.owner}/${repoInfo.repo}/new/${branch}?filename=${filePath}&value=${encoded}`;
 
   window.navigateTo(url);
 
@@ -50,10 +54,24 @@ function showDownloadAlert() {
   alert.focus();
 }
 
-function handleDownloadClick(e) {
+async function handleDownloadClick(e) {
   e.preventDefault();
 
-  const workflow = generateWorkflowWithFormInputs();
+  const repoField = document.getElementById("repo");
+  const repoInfo = parseRepositoryURL(repoField.value.trim());
+
+  let branch = await detectDefaultBranch(repoInfo);
+  if (!branch) branch = "main";
+
+  const workflow = generateWorkflow({
+    useBatchToken: document.getElementById("use-batch-token").checked,
+    useVirtualDisplay: document.getElementById("use-virtual-display").checked,
+    buildAcrossPlatforms: document.getElementById("build-across-platforms")
+      .checked,
+    siteUrl:
+      window.location.origin + window.location.pathname.replace(/\/[^/]*$/, ""),
+    branch,
+  });
 
   const blob = new Blob([workflow], { type: "text/yaml" });
   const url = URL.createObjectURL(blob);
