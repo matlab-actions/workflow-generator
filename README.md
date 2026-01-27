@@ -23,6 +23,7 @@ For more information about the GitHub actions for MATLAB that you can use in you
 - [Use MATLAB with GitHub Actions](https://github.com/matlab-actions)
 - [Continuous Integration with MATLAB and Simulink](https://www.mathworks.com/solutions/continuous-integration.html)
 
-## Contact Us
+## Feedback and Support
+If you have an enhancement request or other feedback about this generator, create an issue on the [Issues](https://github.com/matlab-actions/workflow-generator/issues) page.
 
-If you have any questions or suggestions, contact MathWorks&reg; at [continuous-integration@mathworks.com](mailto:continuous-integration@mathworks.com).
+For support, contact [MathWorks Technical Support](https://www.mathworks.com/support/contact_us.html).
