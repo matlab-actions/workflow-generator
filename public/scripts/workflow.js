@@ -174,7 +174,7 @@ function generateWorkflow({
       `.trimStart()
       }
       steps:
-        - uses: actions/checkout@v4
+        - uses: actions/checkout@v6
         ${
           useVirtualDisplay
             ? `
@@ -189,7 +189,7 @@ function generateWorkflow({
         }
         # Set up MATLAB and other MathWorks products on the runner.
         - name: Set up MATLAB
-          uses: matlab-actions/setup-matlab@v2
+          uses: matlab-actions/setup-matlab@v3
           with:
             release: latest
             cache: true
@@ -199,20 +199,20 @@ function generateWorkflow({
 
         # Run tests authored using the MATLAB unit testing framework or Simulink Test.
         - name: Run MATLAB tests
-          uses: matlab-actions/run-tests@v2
+          uses: matlab-actions/run-tests@v3
           # If you are not using a MATLAB project, add your source code to the path using the source-folder input.
           # with:
           #   source-folder: myfolderA; myfolderB
 
         # Alternatively, run tasks from your buildfile.m.
         # - name: Run MATLAB build
-        #   uses: matlab-actions/run-build@v2
+        #   uses: matlab-actions/run-build@v3
         #   with:
         #     tasks: test
 
         # Alternatively, run MATLAB scripts, functions, and statements.
         # - name: Run MATLAB command
-        #   uses: matlab-actions/run-command@v2
+        #   uses: matlab-actions/run-command@v3
         #   with:
         #     command: results = runtests('IncludeSubfolders',true); assertSuccess(results);
   `);
